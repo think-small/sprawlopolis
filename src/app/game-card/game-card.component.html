@@ -1,0 +1,8 @@
+<h4>Select Game</h4>
+<section *ngIf="this.selectedGame$ | async as game">
+    <h2>{{ game.name }}</h2>
+    <h4 *ngIf="this.currentScore$ | async as currentScore">Current Score: {{ currentScore }}</h4>
+    <ng-container *ngFor="let blockType of game.blockTypes">
+        <app-score-input [block]="blockType" [isPositive]="true"></app-score-input>
+    </ng-container>
+</section>
