@@ -1,7 +1,7 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Block } from '../models/contracts/block.interface';
 import { FormControl } from '@angular/forms';
-import { Subscription, debounceTime, distinctUntilChanged, map, filter } from 'rxjs';
+import { Subscription, debounceTime, distinctUntilChanged, map } from 'rxjs';
 import { GameManagerService } from '../services/game-manager/game-manager.service';
 import { v4 as uuid } from 'uuid';
 import { ScoreInput } from '../models/contracts/score-input';
@@ -28,17 +28,7 @@ export class ScoreInputComponent implements OnInit, OnDestroy {
       .pipe(
         debounceTime(500),
         distinctUntilChanged(),
-        map((val: number) => {
-          let output: ScoreInput = { id: this.id, score: 0 };
-
-          if (this.isPositive && val >= 0 ||
-            this.isPositive === false && val <= 0) {
-            const multiplier = this.isPositive ? 1 : -1;
-            output.score = val * multiplier;
-          }
-
-          return output;
-        })
+        map((val: number) => ({ id: this.id, score: this.calculateScore(val) }))
       )
       .subscribe((score: ScoreInput) => {
         this.gameManager.updateScore(score);
@@ -47,6 +37,20 @@ export class ScoreInputComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.subScoreInput.unsubscribe();
+  }
+
+  private calculateScore(val: number): number {
+    let output: number;
+
+    if (this.isPositive && val >= 0 ||
+      this.isPositive === false && val <= 0) {
+      output = val;
+    }
+    else {
+      output = 0;
+    }
+
+    return output;
   }
 
 }
