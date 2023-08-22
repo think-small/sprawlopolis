@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, Subject, map } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, map, tap } from 'rxjs';
 import { Game } from 'src/app/models/contracts/game.interface';
 import { GAME_TYPES, GameTypes } from 'src/app/models/contracts/gametype';
 import { Naturopolis } from 'src/app/models/naturopolis/naturopolis.model';
@@ -35,7 +35,8 @@ export class GameManagerService {
         }
 
         return game;
-      })
+      }),
+      tap(() => this.sbjCurrentScores$.next([]))
     );
 
   constructor() {
