@@ -41,7 +41,7 @@ export class ScoreInputComponent implements OnInit, OnDestroy {
         })
       )
       .subscribe((score: ScoreInput) => {
-        this.gameManager.appendScore(score);
+        this.gameManager.updateScore(score);
       });
   }
 

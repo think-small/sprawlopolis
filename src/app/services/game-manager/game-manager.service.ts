@@ -46,7 +46,7 @@ export class GameManagerService {
     this.sbjSelectedGameType$.next(gameType);
   }
 
-  public appendScore(score: ScoreInput) {
+  public updateScore(score: ScoreInput) {
     let updatedScores: ScoreInput[];
     const foundScore = this.sbjCurrentScores$.value.find(s => s.id === score.id);
 
