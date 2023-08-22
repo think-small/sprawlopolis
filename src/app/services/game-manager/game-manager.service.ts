@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, Subject, map, scan } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, map } from 'rxjs';
 import { Game } from 'src/app/models/contracts/game.interface';
 import { GAME_TYPES, GameTypes } from 'src/app/models/contracts/gametype';
 import { Naturopolis } from 'src/app/models/naturopolis/naturopolis.model';
 import { Sprawlopolis } from 'src/app/models/sprawlopolis/sprawlopolis.model';
-import { ScoreCalculatorService } from '../score-calculator/score-calculator.service';
+import { ScoreInput } from 'src/app/models/contracts/score-input';
 
 @Injectable({
   providedIn: 'root'
@@ -14,10 +14,10 @@ export class GameManagerService {
   private sbjSelectedGameType$: Subject<GameTypes> = new Subject<GameTypes>();
   private selectedGameType$: Observable<GameTypes> = this.sbjSelectedGameType$.asObservable();
 
-  private sbjCurrentScores$: BehaviorSubject<number[]> = new BehaviorSubject<number[]>([]);
+  private sbjCurrentScores$: BehaviorSubject<ScoreInput[]> = new BehaviorSubject<ScoreInput[]>([]);
   public currentScore$: Observable<number> = this.sbjCurrentScores$
     .pipe(
-      map((scores: number[]) => scores.reduce((acc: number, curr: number) => acc += curr, 0))
+      map((scores: ScoreInput[]) => scores.reduce((acc: number, curr: ScoreInput) => acc += curr.score, 0))
     );
 
   public allGames: string[] = [];
@@ -38,7 +38,7 @@ export class GameManagerService {
       })
     );
 
-  constructor(private readonly calculator: ScoreCalculatorService) {
+  constructor() {
     GAME_TYPES.forEach(gameType => this.allGames.push(gameType));
   }
 
@@ -46,8 +46,18 @@ export class GameManagerService {
     this.sbjSelectedGameType$.next(gameType);
   }
 
-  public appendScore(score: number) {
-    const updatedScores: number[] = [...this.sbjCurrentScores$.value, score];
-    this.sbjCurrentScores$.next(updatedScores); 
+  public appendScore(score: ScoreInput) {
+    let updatedScores: ScoreInput[];
+    const foundScore = this.sbjCurrentScores$.value.find(s => s.id === score.id);
+
+    if (foundScore) {
+      foundScore.score = score.score;
+      updatedScores = [...this.sbjCurrentScores$.value.filter(s => s.id !== score.id), foundScore];
+    }
+    else {
+      updatedScores = [...this.sbjCurrentScores$.value, score];
+    }
+
+    this.sbjCurrentScores$.next(updatedScores);
   }
 }

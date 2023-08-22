@@ -1,7 +1,14 @@
 <div *ngIf="block">
     <label [for]="block.name">
-        <img [src]="block.iconPath" />     
+        <img [src]="block.iconPath" />
         {{ block.name }}:
     </label>
-    <input matNativeInput type="number" name="block.name" [formControl]="scoreInput" />
+    <input
+      matNativeInput
+      type="number"
+      name="block.name"
+      [formControl]="scoreInput"
+      [min]="isPositive ? 0 : ''"
+      [max]="isPositive ? '' : 0"
+    />
 </div>
