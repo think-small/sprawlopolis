@@ -1,0 +1,24 @@
+<section>
+  <mat-form-field>
+    <mat-label>Win Condition</mat-label>
+    <mat-select [formControl]="cardSelector">
+      <mat-option *ngFor="let card of cards" [value]="card">
+        {{ card.name }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <div *ngIf="cardSelector.value as winCondition">
+    <app-score-input
+      *ngIf="winCondition.hasPositiveScoreCondition"
+      [isPositive]="true"
+      [block]="{ name: 'Positive', iconPath: '' }"
+    >
+    </app-score-input>
+    <app-score-input
+      *ngIf="winCondition.hasNegativeScoreCondition"
+      [isPositive]="false"
+      [block]="{ name: 'Negative', iconPath: '' }"
+    >
+    </app-score-input>
+  </div>
+</section>

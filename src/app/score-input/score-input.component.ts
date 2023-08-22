@@ -30,9 +30,7 @@ export class ScoreInputComponent implements OnInit, OnDestroy {
         distinctUntilChanged(),
         map((val: number) => ({ id: this.id, score: this.calculateScore(val) }))
       )
-      .subscribe((score: ScoreInput) => {
-        this.gameManager.updateScore(score);
-      });
+      .subscribe((score: ScoreInput) => this.gameManager.updateScore(score));
   }
 
   ngOnDestroy(): void {

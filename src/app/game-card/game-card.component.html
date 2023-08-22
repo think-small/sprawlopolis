@@ -1,14 +1,16 @@
-<h4>Select Game</h4>
-<section *ngIf="this.selectedGame$ | async as game">
+<section *ngIf="selectedGame$ | async as game">
   <h2>{{ game.name }}</h2>
   <h4>Current Score:
-    <span *ngIf="this.currentScore$ | async as currentScore">
+    <span *ngIf="currentScore$ | async as currentScore">
       {{ currentScore || 0 }}
     </span>
   </h4>
   <h4>Score to Win:
-    <span></span>
+    <span *ngIf="winCondition$ | async as winCondition">
+      {{ winCondition || 0 }}
+    </span>
   </h4>
+  <app-win-condition [cards]="game.cards"></app-win-condition>
   <ng-container *ngFor="let blockType of game.blockTypes">
     <app-score-input
       [block]="blockType"

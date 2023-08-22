@@ -14,6 +14,12 @@ export class GameManagerService {
   private sbjSelectedGameType$: Subject<GameTypes> = new Subject<GameTypes>();
   private selectedGameType$: Observable<GameTypes> = this.sbjSelectedGameType$.asObservable();
 
+  private sbjWinCondition$: BehaviorSubject<ScoreInput[]> = new BehaviorSubject<ScoreInput[]>([]);
+  public winCondition$: Observable<number> = this.sbjWinCondition$
+    .pipe(
+      map((scores: ScoreInput[]) => scores.reduce((acc: number, curr: ScoreInput) => acc += curr.score, 0))
+    );
+
   private sbjCurrentScores$: BehaviorSubject<ScoreInput[]> = new BehaviorSubject<ScoreInput[]>([]);
   public currentScore$: Observable<number> = this.sbjCurrentScores$
     .pipe(
@@ -60,5 +66,20 @@ export class GameManagerService {
     }
 
     this.sbjCurrentScores$.next(updatedScores);
+  }
+
+  public updateWinCondition(score: ScoreInput) {
+    let updatedWinConditions: ScoreInput[];
+    const foundWinCondition = this.sbjWinCondition$.value.find(w => w.id === score.id);
+
+    if (foundWinCondition) {
+      foundWinCondition.score = score.score;
+      updatedWinConditions = [...this.sbjWinCondition$.value.filter(w => w.id !== score.id), foundWinCondition];
+    }
+    else {
+      updatedWinConditions = [...this.sbjWinCondition$.value, score];
+    }
+
+    this.sbjWinCondition$.next(updatedWinConditions);
   }
 }

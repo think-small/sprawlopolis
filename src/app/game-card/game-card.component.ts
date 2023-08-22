@@ -11,12 +11,14 @@ import { Game } from '../models/contracts/game.interface';
 export class GameCardComponent implements OnInit {
   public selectedGame$!: Observable<Game>;
   public currentScore$!: Observable<number>;
+  public winCondition$!: Observable<number>;
 
   constructor(private readonly gameManager: GameManagerService) { }
 
   ngOnInit(): void {
     this.selectedGame$ = this.gameManager.selectedGame$;
     this.currentScore$ = this.gameManager.currentScore$;
+    this.winCondition$ = this.gameManager.winCondition$;
   }
 
 }

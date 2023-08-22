@@ -11,12 +11,14 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { GameCardComponent } from './game-card/game-card.component';
 import { ScoreInputComponent } from './score-input/score-input.component';
+import { WinConditionComponent } from './win-condition/win-condition.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     GameCardComponent,
-    ScoreInputComponent
+    ScoreInputComponent,
+    WinConditionComponent
   ],
   imports: [
     BrowserModule,

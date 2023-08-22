@@ -1,6 +1,6 @@
 <div *ngIf="block">
     <label [for]="block.name">
-        <img [src]="block.iconPath" />
+        <img *ngIf="block.iconPath" [src]="block.iconPath" />
         {{ block.name }}:
     </label>
     <input
