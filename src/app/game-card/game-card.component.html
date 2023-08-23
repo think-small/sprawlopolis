@@ -1,15 +1,13 @@
 <ng-container *ngIf="selectedGame$ | async as game">
-  <section *ngIf="game.name != defaultGame.name; else defaultMessage">
-    <h2>Current Score:
-      <span *ngIf="currentScore$ | async as currentScore">
-        {{ currentScore || 0 }}
-      </span>
-    </h2>
-    <h2>Score to Win:
-      <span *ngIf="winCondition$ | async as winCondition">
-        {{ winCondition || 0 }}
-      </span>
-    </h2>
+  <section *ngIf="game.name != defaultGame.name; else defaultMessage" class="game-card__container">
+    <div class="scores__container">
+      <h2>Current Score:
+        <span *ngIf="{ value: currentScore$ | async } as currentScore">{{ currentScore.value }}</span>
+      </h2>
+      <h2>Score to Win:
+        <span *ngIf="{ value: winCondition$ | async } as winCondition">{{ winCondition.value }}</span>
+      </h2>
+    </div>
     <ng-container *ngRepeat="game.winConditionCount">
       <app-win-condition [cards]="game.cards"></app-win-condition>
     </ng-container>
@@ -23,6 +21,8 @@
 </ng-container>
 
 <ng-template #defaultMessage>
-  <h2>Welcome to Sprawlopolis!</h2>
-  <p>Please select either the base game or one of the many supported expansions from the menu.</p>
+  <section class="game-card__container">
+    <h2>Welcome to Sprawlopolis!</h2>
+    <p>Please select either the base game or one of the many supported expansions from the menu.</p>
+  </section>
 </ng-template>
