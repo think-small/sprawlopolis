@@ -1,8 +1,14 @@
-<mat-toolbar color="primary">
-  <button mat-icon-button (click)="openMenuDialog()">
-    <mat-icon>menu</mat-icon>
-  </button>
-  <span *ngIf="gameSelection$ | async as selectedGame">{{ selectedGame?.name ?? "Select a Game"}}</span>
-</mat-toolbar>
+<ng-container *ngIf="gameSelection$ | async as selectedGame">
+  <mat-toolbar
+    color="primary"
+    [style.background-image]="'linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url(' + selectedGame.backgroundImgPath + ')'"
+    [style.background-position]="'center'"
+  >
+    <button mat-icon-button (click)="openMenuDialog()">
+      <mat-icon>menu</mat-icon>
+    </button>
+    <span>{{ selectedGame?.name ?? "Select a Game"}}</span>
+  </mat-toolbar>
+</ng-container>
 
 <app-game-card></app-game-card>
