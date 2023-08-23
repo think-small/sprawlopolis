@@ -153,7 +153,7 @@ export class Sprawlopolis {
 
     blockTypes.push({
       name: "Residential",
-      iconPath: ""
+      iconPath: "../../../assets/icons/residential.png"
     });
 
     blockTypes.push({
@@ -173,7 +173,7 @@ export class Sprawlopolis {
 
     blockTypes.push({
       name: "Road",
-      iconPath: ""
+      iconPath: "../../../assets/icons/road.png"
     })
 
     return blockTypes;

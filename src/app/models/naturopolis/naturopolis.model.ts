@@ -174,7 +174,7 @@ export class Naturopolis implements Game {
 
     blockTypes.push({
       name: "Road",
-      iconPath: ""
+      iconPath: "../../../assets/icons/road.png"
     });
 
     return blockTypes;
