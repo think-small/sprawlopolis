@@ -145,7 +145,7 @@ export class Sprawlopolis {
       finalScore: 7
     });
 
-    return cards;
+    return cards.sort((a, b) => a.name < b.name ? -1 : 1);
   }
 
   private createBlockTypes(): Block[] {

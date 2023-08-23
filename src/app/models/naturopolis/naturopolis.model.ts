@@ -146,7 +146,7 @@ export class Naturopolis implements Game {
       finalScore: 3
     });
 
-    return cards;
+    return cards.sort((a, b) => a.name < b.name ? -1 : 1);
   }
 
   private createBlockTypes(): Block[] {
