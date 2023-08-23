@@ -1,10 +1,11 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Block } from '../models/contracts/block.interface';
-import { FormControl } from '@angular/forms';
-import { Subscription, debounceTime, distinctUntilChanged, map } from 'rxjs';
+import { FormControl, FormControlStatus, Validators } from '@angular/forms';
+import { Subscription, debounceTime, distinctUntilChanged, combineLatest } from 'rxjs';
 import { GameManagerService } from '../services/game-manager/game-manager.service';
 import { v4 as uuid } from 'uuid';
-import { ScoreInput } from '../models/contracts/score-input';
+
+const ZERO = 0;
 
 @Component({
   selector: 'app-score-input',
@@ -15,7 +16,7 @@ export class ScoreInputComponent implements OnInit, OnDestroy {
   @Input() block!: Block;
   @Input() isPositive!: boolean;
 
-  public scoreInput = new FormControl();
+  public scoreInput!: FormControl;
   private subScoreInput!: Subscription;
   private id: string;
 
@@ -24,13 +25,26 @@ export class ScoreInputComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.subScoreInput = this.scoreInput.valueChanges
-      .pipe(
-        debounceTime(500),
-        distinctUntilChanged(),
-        map((val: number) => ({ id: this.id, score: this.calculateScore(val) }))
-      )
-      .subscribe((score: ScoreInput) => this.gameManager.updateScore(score));
+    const validators = [];
+
+    if (this.isPositive) {
+      validators.push(Validators.min(ZERO));
+    }
+    else {
+      validators.push(Validators.max(ZERO));
+    }
+
+    this.scoreInput = new FormControl(ZERO, validators);
+
+    this.subScoreInput =
+      combineLatest([
+        this.scoreInput.statusChanges,
+        this.scoreInput.valueChanges.pipe(debounceTime(500), distinctUntilChanged())
+      ])
+        .subscribe(([_, val]: [FormControlStatus, number]) => {
+          const score = { id: this.id, score: this.calculateScore(val) }
+          this.gameManager.updateScore(score);
+        });
   }
 
   ngOnDestroy(): void {
@@ -40,12 +54,12 @@ export class ScoreInputComponent implements OnInit, OnDestroy {
   private calculateScore(val: number): number {
     let output: number;
 
-    if (this.isPositive && val >= 0 ||
-      this.isPositive === false && val <= 0) {
+    if (this.isPositive && val >= ZERO ||
+      this.isPositive === false && val <= ZERO) {
       output = val;
     }
     else {
-      output = 0;
+      output = ZERO;
     }
 
     return output;

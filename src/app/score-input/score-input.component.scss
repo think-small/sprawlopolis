@@ -1,10 +1,32 @@
-div {
+.container {
     display: flex;
     gap: 1rem;
     justify-content: space-between;
+    align-items: center;
 }
 
 img {
     aspect-ratio: 16/9;
     max-width: 50px;
+}
+
+.score__container {
+  display: flex;
+  flex-direction: column;
+  align-items: end;
+}
+
+input {
+  position: relative;
+}
+
+input.ng-invalid {
+  border: 2px solid red;
+  outline: none;
+  color: red;
+}
+
+.error__message {
+  color: red;
+  font-size: 0.7rem;
 }

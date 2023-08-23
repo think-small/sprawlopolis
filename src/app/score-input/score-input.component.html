@@ -1,8 +1,9 @@
-<div *ngIf="block">
+<div *ngIf="block" class="container">
     <label [for]="block.name">
         <img *ngIf="block.iconPath" [src]="block.iconPath" />
         {{ block.name }}:
     </label>
+  <div class="score__container">
     <input
       matNativeInput
       type="number"
@@ -10,5 +11,15 @@
       [formControl]="scoreInput"
       [min]="isPositive ? 0 : ''"
       [max]="isPositive ? '' : 0"
+      class="score__input"
     />
+    <div *ngIf="scoreInput.invalid && (scoreInput.dirty || scoreInput.touched)" class="alert alert-danger">
+      <div *ngIf="scoreInput.errors?.['min']" class="error__message">
+        Must be greater than or equal to zero
+      </div>
+      <div *ngIf="scoreInput.errors?.['max']" class="error__message">
+        Must be less than or equal to zero
+      </div>
+    </div>
+  </div>
 </div>
