@@ -10,7 +10,9 @@
       {{ winCondition || 0 }}
     </span>
   </h4>
-  <app-win-condition [cards]="game.cards"></app-win-condition>
+  <ng-container *ngRepeat="game.winConditionCount">
+    <app-win-condition [cards]="game.cards"></app-win-condition>
+  </ng-container>
   <ng-container *ngFor="let blockType of game.blockTypes">
     <app-score-input
       [block]="blockType"

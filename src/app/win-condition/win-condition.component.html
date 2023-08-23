@@ -12,13 +12,11 @@
       *ngIf="winCondition.hasPositiveScoreCondition"
       [isPositive]="true"
       [block]="{ name: 'Positive', iconPath: '' }"
-    >
-    </app-score-input>
+    ></app-score-input>
     <app-score-input
       *ngIf="winCondition.hasNegativeScoreCondition"
       [isPositive]="false"
       [block]="{ name: 'Negative', iconPath: '' }"
-    >
-    </app-score-input>
+    ></app-score-input>
   </div>
 </section>

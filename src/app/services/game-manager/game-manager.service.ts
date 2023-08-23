@@ -5,6 +5,7 @@ import { GAME_TYPES, GameTypes } from 'src/app/models/contracts/gametype';
 import { Naturopolis } from 'src/app/models/naturopolis/naturopolis.model';
 import { Sprawlopolis } from 'src/app/models/sprawlopolis/sprawlopolis.model';
 import { ScoreInput } from 'src/app/models/contracts/score-input';
+import { v4 as uuid } from 'uuid';
 
 @Injectable({
   providedIn: 'root'
@@ -42,8 +43,15 @@ export class GameManagerService {
 
         return game;
       }),
-      tap(() => this.sbjCurrentScores$.next([]))
+      tap(() => {
+        this.sbjCurrentScores$.next([]);
+        this.sbjWinCondition$.next([]);
+        this.sbjRenderTrigger$.next(uuid());
+      })
     );
+
+  public sbjRenderTrigger$: BehaviorSubject<string> = new BehaviorSubject<string>("");
+  public renderTrigger$: Observable<string> = this.sbjRenderTrigger$.asObservable();
 
   constructor() {
     GAME_TYPES.forEach(gameType => this.allGames.push(gameType));

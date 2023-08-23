@@ -12,13 +12,15 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { GameCardComponent } from './game-card/game-card.component';
 import { ScoreInputComponent } from './score-input/score-input.component';
 import { WinConditionComponent } from './win-condition/win-condition.component';
+import { RepeatDirective } from './directives/repeat/repeat.directive';
 
 @NgModule({
   declarations: [
     AppComponent,
     GameCardComponent,
     ScoreInputComponent,
-    WinConditionComponent
+    WinConditionComponent,
+    RepeatDirective
   ],
   imports: [
     BrowserModule,

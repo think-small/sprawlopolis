@@ -15,6 +15,7 @@ export class WinConditionComponent implements OnInit, OnDestroy {
   @Input() cards!: Card[];
   public cardSelector: FormControl = new FormControl();
   public subCardSelector!: Subscription;
+  public subRenderTrigger!: Subscription;
   public id!: string;
 
   constructor(private readonly gameManager: GameManagerService) { }
@@ -22,13 +23,19 @@ export class WinConditionComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.id = uuid();
 
-    this.subCardSelector = this.cardSelector.valueChanges.pipe(
-      map((val: Card) => ({ id: this.id, score: val.finalScore }))
-    ).subscribe((score: ScoreInput) => this.gameManager.updateWinCondition(score));
+    // HACK - BS - accounting for type Card | null is required due to the need to reset the cardSelector
+    //             FormControl from inside the renderTrigger$ subscription whenever the user changes
+    //             the selected game.
+    this.subCardSelector = this.cardSelector.valueChanges.
+      pipe(map((val: Card | null) => ({ id: this.id, score: val?.finalScore ?? 0 })))
+      .subscribe((score: ScoreInput) => this.gameManager.updateWinCondition(score));
+
+    this.subRenderTrigger = this.gameManager.renderTrigger$.subscribe(() => this.cardSelector.reset());
   }
 
   ngOnDestroy(): void {
     this.subCardSelector.unsubscribe();
+    this.subRenderTrigger.unsubscribe();
   }
 
 }

@@ -7,11 +7,13 @@ export class Sprawlopolis {
   public cards: Card[];
   public blockTypes: Block[];
   public overlayColor: string;
+  public winConditionCount: number;
 
   constructor() {
     this.cards = this.createCards();
     this.blockTypes = this.createBlockTypes();
     this.overlayColor = "#ffff";
+    this.winConditionCount = 3;
   }
 
   private createCards(): Card[] {
