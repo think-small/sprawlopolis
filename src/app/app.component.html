@@ -1,9 +1,8 @@
-<mat-form-field>
-    <mat-label>Game</mat-label>
-    <mat-select [formControl]="gameSelection">
-        <mat-option *ngFor="let game of allGames" [value]="game">
-            {{ game }}
-        </mat-option>
-    </mat-select>
-</mat-form-field>
+<mat-toolbar color="primary">
+  <button mat-icon-button (click)="openMenuDialog()">
+    <mat-icon>menu</mat-icon>
+  </button>
+  <span *ngIf="gameSelection$ | async as selectedGame">{{ selectedGame?.name ?? "Select a Game"}}</span>
+</mat-toolbar>
+
 <app-game-card></app-game-card>

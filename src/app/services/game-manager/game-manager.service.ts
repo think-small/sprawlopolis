@@ -1,11 +1,20 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, Subject, map, tap } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, map, tap, startWith } from 'rxjs';
 import { Game } from 'src/app/models/contracts/game.interface';
 import { GAME_TYPES, GameTypes } from 'src/app/models/contracts/gametype';
 import { Naturopolis } from 'src/app/models/naturopolis/naturopolis.model';
 import { Sprawlopolis } from 'src/app/models/sprawlopolis/sprawlopolis.model';
 import { ScoreInput } from 'src/app/models/contracts/score-input';
 import { v4 as uuid } from 'uuid';
+
+export const DEFAULT_GAME = {
+  name: "Select a game...",
+  backgroundImgPath: "",
+  overlayColor: "",
+  cards: [],
+  blockTypes: [],
+  winConditionCount: 0
+}
 
 @Injectable({
   providedIn: 'root'
@@ -43,6 +52,7 @@ export class GameManagerService {
 
         return game;
       }),
+      startWith(DEFAULT_GAME),
       tap(() => {
         this.sbjCurrentScores$.next([]);
         this.sbjWinCondition$.next([]);

@@ -1,22 +1,28 @@
-<section *ngIf="selectedGame$ | async as game">
-  <h2>{{ game.name }}</h2>
-  <h4>Current Score:
-    <span *ngIf="currentScore$ | async as currentScore">
-      {{ currentScore || 0 }}
-    </span>
-  </h4>
-  <h4>Score to Win:
-    <span *ngIf="winCondition$ | async as winCondition">
-      {{ winCondition || 0 }}
-    </span>
-  </h4>
-  <ng-container *ngRepeat="game.winConditionCount">
-    <app-win-condition [cards]="game.cards"></app-win-condition>
-  </ng-container>
-  <ng-container *ngFor="let blockType of game.blockTypes">
-    <app-score-input
-      [block]="blockType"
-      [isPositive]="blockType.name !== 'Road'">
-    </app-score-input>
-  </ng-container>
-</section>
+<ng-container *ngIf="selectedGame$ | async as game">
+  <section *ngIf="game.name != defaultGame.name; else defaultMessage">
+    <h2>Current Score:
+      <span *ngIf="currentScore$ | async as currentScore">
+        {{ currentScore || 0 }}
+      </span>
+    </h2>
+    <h2>Score to Win:
+      <span *ngIf="winCondition$ | async as winCondition">
+        {{ winCondition || 0 }}
+      </span>
+    </h2>
+    <ng-container *ngRepeat="game.winConditionCount">
+      <app-win-condition [cards]="game.cards"></app-win-condition>
+    </ng-container>
+    <ng-container *ngFor="let blockType of game.blockTypes">
+      <app-score-input
+        [block]="blockType"
+        [isPositive]="blockType.name !== 'Road'">
+      </app-score-input>
+    </ng-container>
+  </section>
+</ng-container>
+
+<ng-template #defaultMessage>
+  <h2>Welcome to Sprawlopolis!</h2>
+  <p>Please select either the base game or one of the many supported expansions from the menu.</p>
+</ng-template>

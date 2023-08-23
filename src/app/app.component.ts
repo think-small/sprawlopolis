@@ -1,28 +1,27 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { GameManagerService } from './services/game-manager/game-manager.service';
-import { FormControl } from '@angular/forms';
-import { Subscription } from 'rxjs';
-import { GameTypes } from './models/contracts/gametype';
+import { Observable } from 'rxjs';
+import { Game } from './models/contracts/game.interface';
+import { MatDialog } from '@angular/material/dialog';
+import { MenuDialogComponent } from './menu-dialog/menu-dialog.component';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit, OnDestroy {
-  public allGames: string[] = this.gameManager.allGames;
-  public gameSelection: FormControl = new FormControl();
-  private subGameSelection!: Subscription;
-  
-  constructor(private readonly gameManager: GameManagerService) { }
+export class AppComponent implements OnInit {
+  public gameSelection$!: Observable<Game>;
+
+  constructor(
+    private readonly gameManager: GameManagerService,
+    private menuDialog: MatDialog) { }
 
   ngOnInit(): void {
-    this.subGameSelection = this.gameSelection.valueChanges.subscribe((game: GameTypes) => {
-      this.gameManager.setSelectedGameType(game);
-    });
+    this.gameSelection$ = this.gameManager.selectedGame$;
   }
 
-  ngOnDestroy(): void {
-    this.subGameSelection.unsubscribe();
+  public openMenuDialog(): void {
+    this.menuDialog.open(MenuDialogComponent);
   }
 }
